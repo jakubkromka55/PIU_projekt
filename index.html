@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Helpdesk — Panel</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="brand-wrap">
+        <h1 class="brand">Helpdesk</h1>
+        <p class="tagline">Szybkie zgłoszenia · Kanban · Analiza</p>
+      </div>
+      <nav class="top-nav" role="navigation" aria-label="Główne">
+        <button class="tab-btn active" data-tab="home" aria-controls="home" aria-selected="true">Strona główna</button>
+        <button class="tab-btn" data-tab="tickets" aria-controls="tickets">Lista zgłoszeń</button>
+        <button class="tab-btn" data-tab="kanban" aria-controls="kanban">Tablica Kanban</button>
+        <button class="tab-btn" data-tab="analytics" aria-controls="analytics">Analiza</button>
+        <button class="tab-btn" data-tab="answered" aria-controls="answered">Odpowiedziane</button>
+      </nav>
+
+      <div class="header-actions">
+        <button id="themeToggle" class="btn secondary">🌙 Tryb ciemny</button>
+        <div class="user-panel">
+          <span id="currentUserLabel">Niezalogowany</span>
+          <button id="loginOpen" class="btn secondary">Zaloguj</button>
+          <button id="logoutBtn" class="btn secondary hidden">Wyloguj</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="main" role="main">
+
+    <section id="home" class="card tab-panel" role="region" aria-labelledby="homeTitle">
+      <h2 id="homeTitle">Witaj w panelu Helpdesk</h2>
+      <p class="lead">Twórz zgłoszenia, zarządzaj nimi na tablicy Kanban i monitoruj priorytety w czasie rzeczywistym.</p>
+      <div class="home-grid">
+        <div class="stat-card">
+          <h3 id="stat-total">0</h3>
+          <p>Wszystkie zgłoszenia</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="stat-open">0</h3>
+          <p>Nowe</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="stat-inprogress">0</h3>
+          <p>W trakcie</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="stat-closed">0</h3>
+          <p>Zamknięte</p>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="authModal" class="card tab-panel hidden" role="dialog" aria-labelledby="authTitle">
+      <h2 id="authTitle">Logowanie / Rejestracja</h2>
+      <p class="lead">Domyślne konto administratora: <strong>admin@example.com</strong> / <strong>admin</strong></p>
+
+      <div class="tickets-grid" style="grid-template-columns: 1fr 1fr;">
+
+        <section class="panel">
+          <h3>Zaloguj się</h3>
+          <form id="loginForm" class="form">
+            <label for="loginEmail">Email</label>
+            <input id="loginEmail" name="email" type="email" required />
+
+            <label for="loginPassword">Hasło</label>
+            <input id="loginPassword" name="password" type="password" required />
+
+            <div class="form-actions">
+              <button type="submit" class="btn primary">Zaloguj</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <h3>Rejestracja</h3>
+          <form id="registerForm" class="form">
+            <label for="registerEmail">Email</label>
+            <input id="registerEmail" name="email" type="email" required />
+
+            <label for="registerPassword">Hasło</label>
+            <input id="registerPassword" name="password" type="password" required />
+
+            <p class="lead" style="font-size:0.8rem;">
+              Nowi użytkownicy otrzymują rolę <strong>user</strong> (nie mogą usuwać zgłoszeń).
+            </p>
+
+            <div class="form-actions">
+              <button type="submit" class="btn secondary">Zarejestruj</button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <div class="form-actions" style="justify-content:flex-start;margin-top:10px;">
+        <button id="authClose" class="btn secondary">Zamknij</button>
+      </div>
+    </section>
+
+    <section id="tickets" class="card tab-panel hidden" role="region" aria-labelledby="ticketsTitle">
+      <h2 id="ticketsTitle">Lista zgłoszeń</h2>
+      <div class="controls">
+        <input id="search" class="input" type="search" placeholder="Szukaj..." aria-label="Szukaj zgłoszeń" />
+        <select id="filterPriority" class="input" aria-label="Filtruj po priorytecie">
+          <option value="all">Wszystkie priorytety</option>
+          <option value="low">Niski</option>
+          <option value="medium">Średni</option>
+          <option value="high">Wysoki</option>
+        </select>
+        <button id="newTicketBtn" class="btn primary">Nowe zgłoszenie</button>
+      </div>
+
+      <div class="tickets-grid">
+        <aside class="panel create-panel hidden" id="createPanel" aria-labelledby="createTitle">
+          <h3 id="createTitle">Nowe zgłoszenie</h3>
+          <form id="ticketForm" class="form" novalidate>
+            <label for="title">Tytuł</label>
+            <input id="title" name="title" required maxlength="120" />
+
+            <label for="description">Opis</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+
+            <label for="priority">Priorytet</label>
+            <select id="priority" name="priority" required>
+              <option value="low">Niski</option>
+              <option value="medium" selected>Średni</option>
+              <option value="high">Wysoki</option>
+            </select>
+
+            <label for="reporter">Zgłaszający (email)</label>
+            <input id="reporter" name="reporter" type="email" placeholder="jan@firma.pl" required />
+
+            <div class="form-actions">
+              <button id="submitTicketBtn" type="submit" class="btn primary">Utwórz</button>
+              <button type="button" id="cancelCreate" class="btn secondary">Anuluj</button>
+            </div>
+          </form>
+        </aside>
+
+        <section class="panel list-panel" aria-labelledby="listTitle">
+          <h3 id="listTitle" class="visually-hidden">Lista zgłoszeń</h3>
+          <div id="list" class="list" role="list"></div>
+        </section>
+
+        <section class="panel preview-panel hidden" id="previewPanel" aria-labelledby="previewTitle">
+          <div class="panel-header">
+            <h3 id="previewTitle">Podgląd zgłoszenia</h3>
+            <button id="closePreviewBtn" class="btn icon" aria-label="Zamknij podgląd">✕</button>
+          </div>
+          <div id="previewContent" class="preview-content" aria-live="polite"></div>
+        </section>
+
+        <section class="panel reply-panel hidden" id="replyPanel">
+          <h3>Odpowiedź na zgłoszenie</h3>
+          <textarea id="replyText" rows="4" class="input" placeholder="Wpisz odpowiedź..."></textarea>
+          <div class="form-actions">
+            <button id="sendReply" class="btn primary">Wyślij odpowiedź</button>
+            <button id="cancelReply" class="btn secondary">Anuluj</button>
+          </div>
+        </section>
+
+      </div>
+    </section>
+
+    <section id="answered" class="card tab-panel hidden" role="region" aria-labelledby="answeredTitle">
+      <h2 id="answeredTitle">Zgłoszenia z odpowiedziami</h2>
+      <div id="answeredList" class="list" role="list"></div>
+    </section>
+
+    <section id="kanban" class="card tab-panel hidden" role="region" aria-labelledby="kanbanTitle">
+      <h2 id="kanbanTitle">Tablica Kanban</h2>
+      <div class="board" id="board" role="list">
+        <div class="column" data-status="new" aria-label="Nowe" role="region">
+          <h3>Nowe</h3>
+          <div class="column-body" id="col-new"></div>
+        </div>
+        <div class="column" data-status="inprogress" aria-label="W trakcie" role="region">
+          <h3>W trakcie</h3>
+          <div class="column-body" id="col-inprogress"></div>
+        </div>
+        <div class="column" data-status="closed" aria-label="Zamknięte" role="region">
+          <h3>Zamknięte</h3>
+          <div class="column-body" id="col-closed"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="analytics" class="card tab-panel hidden" role="region" aria-labelledby="analyticsTitle">
+      <h2 id="analyticsTitle">Analiza priorytetów</h2>
+      <div class="analytics-grid">
+        <div class="panel chart-panel">
+          <canvas id="priorityChart" width="600" height="320" aria-label="Wykres priorytetów"></canvas>
+        </div>
+        <div class="panel breakdown-panel">
+          <h3>Rozkład</h3>
+          <ul id="breakdown" class="breakdown"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <template id="ticketTemplate">
+    <article class="ticket" draggable="true" role="listitem">
+      <header class="ticket-head">
+        <h4 class="ticket-title"></h4>
+        <div class="ticket-meta">
+          <span class="ticket-priority"></span>
+          <button class="btn icon reply" title="Odpowiedz">💬</button>
+          <button class="btn icon edit" title="Edytuj">✎</button>
+          <button class="btn icon delete" title="Usuń">🗑</button>
+        </div>
+      </header>
+      <p class="ticket-desc"></p>
+      <footer class="ticket-footer">
+        <small class="ticket-reporter"></small>
+        <small class="ticket-date"></small>
+      </footer>
+    </article>
+  </template>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-actions">
+        <button id="fetchSample" class="btn secondary">Pobierz próbne zgłoszenia</button>
+      </div>
+      <small>© <span id="year"></span> Helpdesk Mariusz Doniec i Jakub Kromka</small>
+    </div>
+  </footer>
+
+  <div id="toastContainer" aria-live="polite" class="toast-container" aria-atomic="true"></div>
+
+  <script src="./js/helpers.js" defer></script>
+  <script src="./js/storage.js" defer></script>
+  <script src="./js/toasts.js" defer></script>
+  <script src="./js/auth.js" defer></script>
+  <script src="./js/tickets.js" defer></script>
+  <script src="./js/ui.js" defer></script>
+  <script src="./js/main.js" defer></script>
+
+
+</body>
+</html>
