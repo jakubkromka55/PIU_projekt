@@ -56,3 +56,45 @@
     init();
   });
 })(window.Helpdesk = window.Helpdesk || {}, window.Helpdesk.storage, window.Helpdesk.auth, window.Helpdesk.tickets, window.Helpdesk.ui, window.Helpdesk.toasts);
+
+(function () {
+  const modal = document.getElementById('galleryModal');
+  const modalImg = document.getElementById('galleryModalImg');
+  const downloadLink = document.getElementById('galleryDownload');
+  const closeBtn = document.getElementById('galleryCloseBtn');
+
+  if (!modal || !modalImg || !downloadLink) return;
+
+  document.addEventListener('click', (e) => {
+    const img = e.target.closest('.gallery img');
+    if (!img) return;
+
+    const src = img.getAttribute('src');
+    const alt = img.getAttribute('alt') || '';
+
+    modalImg.src = src;
+    modalImg.alt = alt;
+    downloadLink.href = src;
+
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+  });
+
+  function closeModal() {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    modalImg.src = '';
+  }
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+})();

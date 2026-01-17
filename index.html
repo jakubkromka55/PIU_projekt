@@ -19,6 +19,7 @@
         <button class="tab-btn" data-tab="kanban" aria-controls="kanban">Tablica Kanban</button>
         <button class="tab-btn" data-tab="analytics" aria-controls="analytics">Analiza</button>
         <button class="tab-btn" data-tab="answered" aria-controls="answered">Odpowiedziane</button>
+        <button class="tab-btn" data-tab="gallery" aria-controls="gallery">Galeria</button>
       </nav>
 
       <div class="header-actions">
@@ -204,6 +205,33 @@
         </div>
       </div>
     </section>
+    <!-- GALERIA -->
+    <section id="gallery" class="card tab-panel hidden" role="region" aria-labelledby="galleryTitle">
+      <h2 id="galleryTitle">Galeria</h2>
+      <p class="lead">Wybrane elementy infrastruktury i pracy zespołu Helpdesk.</p>
+
+      <div class="gallery">
+        <figure>
+          <img src="./img/img1.jpg" alt="Serwerownia z infrastrukturą IT">
+          <figcaption>Serwerownia</figcaption>
+        </figure>
+
+        <figure>
+          <img src="./img/img2.jpg" alt="Pracownik wsparcia technicznego przy laptopie">
+          <figcaption>Wsparcie techniczne</figcaption>
+        </figure>
+
+        <figure>
+          <img src="./img/img3.jpg" alt="Zabezpieczenia systemów informatycznych">
+          <figcaption>Cyberbezpieczeństwo</figcaption>
+        </figure>
+
+        <figure>
+          <img src="./img/img4.jpg" alt="Urządzenia i okablowanie sieciowe">
+          <figcaption>Infrastruktura sieciowa</figcaption>
+        </figure>
+      </div>
+    </section>
   </main>
 
   <template id="ticketTemplate">
@@ -244,6 +272,19 @@
   <script src="./js/ui.js" defer></script>
   <script src="./js/main.js" defer></script>
 
+  <div id="galleryModal" class="gallery-modal" aria-hidden="true">
+    <div class="gallery-modal-content" role="dialog" aria-modal="true">
+      <img id="galleryModalImg" src="" alt="">
+      <div class="gallery-modal-actions">
+        <a id="galleryDownload" class="btn primary" href="#" download>
+          ⬇️ Pobierz
+        </a>
+        <button class="gallery-modal-close" id="galleryCloseBtn" aria-label="Zamknij">
+          ✕
+        </button>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
